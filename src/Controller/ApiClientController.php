@@ -35,4 +35,15 @@ class ApiClientController extends AbstractController
 
         return $this->json($clientRepository->find($client->getId()), 200, [], ['groups' => 'clients:read']);
     }
+
+    /**
+     * @Route("/api/clients/{id}/customers", name="api_client_customers", methods={"GET"})
+     */
+    public function getClientCustomers(
+        Client $client, 
+        EndUserRepository $endUserRepository): Response
+    {
+
+        return $this->json($endUserRepository->findBy(['client' => $client->getId()]), 200, [], ['groups' => 'customers:read']);
+    }
 }
