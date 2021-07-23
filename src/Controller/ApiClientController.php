@@ -61,7 +61,7 @@ class ApiClientController extends AbstractController
     /**
      * @Route("/api/clients/{id}/customers", name="api_client_customer_new", methods={"POST"})
      */
-    public function createCustomer(Request $request, Client $client, SerializerInterface $serializer, EntityManagerInterface $em)
+    public function createCustomer(Request $request, Client $client, SerializerInterface $serializer, EntityManagerInterface $manager)
     {
 
         // Get the information of the new Client from the POST request
@@ -71,10 +71,27 @@ class ApiClientController extends AbstractController
         $newCustomer->setClient($client);
 
         // Push it to the database
-        $em->persist($newCustomer);
-        $em->flush();
+        $manager->persist($newCustomer);
+        $manager->flush();
+
+        $data = [
+            'status' => 201,
+            'message' => 'L\'utilisateur a bien été ajouté'
+        ];
 
         // Return a response to Postman
-        return $this->json($newCustomer, 201, [], ['groups' => 'customer:read']);
+        return $this->json($data, 201, [], ['groups' => 'customer:read']);
+    }
+
+        /**
+     * @Route("/api/clients/{name}/customers/{id}", name="api_client_customer_delete", methods={"DELETE"})
+     */
+    public function deleteCustomer(EndUser $endUser, EntityManagerInterface $manager)
+    {
+        // Remove the element from the database
+        $manager->remove($endUser);
+        $manager->flush();
+
+        return new Response(null, 204);
     }
 }
