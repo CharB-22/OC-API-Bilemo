@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Client;
-use App\Repository\ClientRepository;
 use App\Entity\EndUser;
+use App\Repository\ClientRepository;
 use App\Repository\EndUserRepository;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -44,6 +44,17 @@ class ApiClientController extends AbstractController
         EndUserRepository $endUserRepository): Response
     {
 
-        return $this->json($endUserRepository->findBy(['client' => $client->getId()]), 200, [], ['groups' => 'customers:read']);
+        return $this->json($endUserRepository->findBy(['Client' => $client->getId()]), 200, [], ['groups' => 'customers:read']);
+    }
+
+    /**
+     * @Route("/api/clients/{company}/customers/{lastName}", name="api_client_customers", methods={"GET"})
+     */
+    public function getCustomerDetails(
+        EndUser $endUser,
+        EndUserRepository $endUserRepository
+    )
+    {
+        return $this->json($endUserRepository->findBy(['lastName' => $endUser->getLastName()]), 200, [], ['groups' => 'customers:read']);
     }
 }
