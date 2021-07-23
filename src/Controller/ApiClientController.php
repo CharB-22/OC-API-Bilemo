@@ -57,4 +57,24 @@ class ApiClientController extends AbstractController
     {
         return $this->json($endUserRepository->findBy(['lastName' => $endUser->getLastName()]), 200, [], ['groups' => 'customers:read']);
     }
+
+    /**
+     * @Route("/api/clients/{id}/customers", name="api_client_customer_new", methods={"POST"})
+     */
+    public function createCustomer(Request $request, Client $client, SerializerInterface $serializer, EntityManagerInterface $em)
+    {
+
+        // Get the information of the new Client from the POST request
+        $jsonContent = $request->getContent();
+        // Deserialize from json to be saved as an EndUser
+        $newCustomer = $serializer->deserialize($jsonContent, EndUser::class, 'json');
+        $newCustomer->setClient($client);
+
+        // Push it to the database
+        $em->persist($newCustomer);
+        $em->flush();
+
+        // Return a response to Postman
+        return $this->json($newCustomer, 201, [], ['groups' => 'customer:read']);
+    }
 }
