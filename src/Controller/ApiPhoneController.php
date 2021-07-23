@@ -22,5 +22,11 @@ class ApiPhoneController extends AbstractController
         return $response = $this->json($phoneRepository->findAll(), 200, [], []);
     }
 
-    
+    /**
+     * @Route("/api/phones/{id}", name="api_phone_details", methods = {"GET"})
+     */
+    public function getPhoneDetails(PhoneRepository $phoneRepository, Phone $phone): Response
+    {
+        return $response = $this->json($phoneRepository->find($phone->getId()), 200, [], []);
+    }
 }
