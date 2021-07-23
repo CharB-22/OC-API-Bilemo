@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
  */
@@ -18,16 +20,19 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"clients:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"clients:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"clients:read"})
      */
     private $roles = [];
 
@@ -39,6 +44,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"clients:read"})
      */
     private $company;
 

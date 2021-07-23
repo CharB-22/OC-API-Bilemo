@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\EndUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity(repositoryClass=EndUserRepository::class)
  */
@@ -14,21 +16,25 @@ class EndUser
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"customers:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers:read"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers:read"})
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers:read"})
      */
     private $email;
 
