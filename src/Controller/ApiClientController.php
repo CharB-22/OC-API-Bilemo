@@ -48,7 +48,7 @@ class ApiClientController extends AbstractController
     }
 
     /**
-     * @Route("/api/clients/{company}/customers/{lastName}", name="api_client_customers", methods={"GET"})
+     * @Route("/api/clients/{company}/customers/{lastName}", name="api_customers_details", methods={"GET"})
      */
     public function getCustomerDetails(
         EndUser $endUser,
@@ -83,7 +83,7 @@ class ApiClientController extends AbstractController
         return $this->json($data, 201, [], ['groups' => 'customer:read']);
     }
 
-        /**
+    /**
      * @Route("/api/clients/{name}/customers/{id}", name="api_client_customer_delete", methods={"DELETE"})
      */
     public function deleteCustomer(EndUser $endUser, EntityManagerInterface $manager)
@@ -93,5 +93,6 @@ class ApiClientController extends AbstractController
         $manager->flush();
 
         return new Response(null, 204);
+        
     }
 }

@@ -27,7 +27,6 @@ class ApiPhoneController extends AbstractController
      */
     public function getPhoneDetails(PhoneRepository $phoneRepository, Phone $phone): Response
     {
-        dd($phone);
         return $response = $this->json($phoneRepository->find($phone->getId()), 200, [], []);
     }
 }
