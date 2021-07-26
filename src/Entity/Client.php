@@ -53,6 +53,11 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $endUsers;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $username;
+
     public function __construct()
     {
         $this->endUsers = new ArrayCollection();
@@ -185,6 +190,13 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
                 $endUser->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }
