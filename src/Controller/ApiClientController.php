@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,6 +21,7 @@ class ApiClientController extends AbstractController
 {
     /**
      * @Route("/api/clients", name="api_clients_list", methods={"GET"})
+     * @IsGranted("ROLE_USER")
      */
     public function getClientList(ClientRepository $clientRepository): Response
     {
