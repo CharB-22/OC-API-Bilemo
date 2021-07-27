@@ -10,9 +10,13 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use Symfony\Component\Serializer\Annotation\Groups;
+use Hateoas\Configuration\Annotation as Hateoas;
+
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
+ * @Hateoas\Relation(
+ * 
  */
 class Client implements UserInterface, PasswordAuthenticatedUserInterface
 {
