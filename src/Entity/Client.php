@@ -15,8 +15,6 @@ use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
- * @Hateoas\Relation(
- * 
  */
 class Client implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -59,6 +57,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"clients:read"})
      */
     private $username;
 
@@ -99,7 +98,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
