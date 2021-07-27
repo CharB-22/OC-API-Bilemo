@@ -6,6 +6,8 @@ use App\Repository\EndUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=EndUserRepository::class)
@@ -23,18 +25,30 @@ class EndUser
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers:read"})
+     * @Assert\NotBlank(
+     *     message = "Cette information doit être renseignée pour la création de cet utilisateur."
+     * )
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers:read"})
+     * @Assert\NotBlank(
+     *     message = "Cette information doit être renseignée pour la création de cet utilisateur."
+     * )
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers:read"})
+     * @Assert\NotBlank(
+     *     message = "Cette information doit être renseignée pour la création de cet utilisateur."
+     * )
+     * @Assert\Email(
+     *     message = "L'email '{{ value }}' ne respecte pas le format."
+     * )
      */
     private $email;
 
