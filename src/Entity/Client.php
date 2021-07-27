@@ -10,6 +10,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use Symfony\Component\Serializer\Annotation\Groups;
+use Hateoas\Configuration\Annotation as Hateoas;
+
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
@@ -53,6 +55,12 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $endUsers;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"clients:read"})
+     */
+    private $username;
+
     public function __construct()
     {
         $this->endUsers = new ArrayCollection();
@@ -90,7 +98,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -185,6 +193,13 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
                 $endUser->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }

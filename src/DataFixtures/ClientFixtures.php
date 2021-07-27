@@ -31,6 +31,7 @@ class ClientFixtures extends Fixture
 
             $client = new Client();
             $client->setEmail($faker->email())
+                   ->setUsername($faker->username())
                    ->setRoles(['ROLE_USER'])
                    ->setPassword($faker->password())
                    ->setCompany($company[array_rand($company)]);
@@ -52,8 +53,9 @@ class ClientFixtures extends Fixture
         // Create a test User for the demo
         $client = new Client();
         $client->setEmail('testUser@mail.com')
+               ->setUsername('testuser')
                ->setRoles(['ROLE_USER'])
-               ->setPassword($this->passwordHasher->hashPassword($client,'testUser'))
+               ->setPassword($this->passwordHasher->hashPassword($client,'testuser'))
                ->setCompany('Orange');
         
         $manager->persist($client);
