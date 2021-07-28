@@ -31,6 +31,7 @@ class ApiPhoneController extends AbstractController
      *         @OA\Items(ref=@Model(type=Phone::class))
      *     )
      * )
+     * @OA\Tag(name="Phone")
      * @Security(name="Bearer")
      */
     public function getPhoneList(PhoneRepository $phoneRepository, SerializerInterface $serializer): Response
@@ -57,6 +58,8 @@ class ApiPhoneController extends AbstractController
      *         @OA\Items(ref=@Model(type=Phone::class))
      *     )
      * )
+     * @OA\Tag(name="Phone")
+     * 
      * @Security(name="Bearer")
      */
     public function getPhoneDetails(PhoneRepository $phoneRepository, 
