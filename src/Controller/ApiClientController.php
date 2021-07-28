@@ -28,7 +28,7 @@ class ApiClientController extends AbstractController
         
         $clients = $clientRepository->findAll();
         
-        $json = $serializer->serialize($clients, 'json');
+        $json = $serializer->serialize($clients, 'json', SerializationContext::create()->setGroups(array('clients:read')));
 
         $response = new JsonResponse($json, 200, [], true);
        
@@ -42,7 +42,7 @@ class ApiClientController extends AbstractController
     {
         $clientDetails = $clientRepository->find($client->getId());
 
-        $json = $serializer->serialize($clientDetails, 'json');
+        $json = $serializer->serialize($clientDetails, 'json', SerializationContext::create()->setGroups(array('clients:read')));
 
         $response = new JsonResponse($json, 200, [], true);
         return $response;
@@ -58,7 +58,7 @@ class ApiClientController extends AbstractController
     {
         $endUsers = $endUserRepository->findBy(['Client' => $client->getId()]);
 
-        $json = $serializer->serialize($endUsers, 'json');
+        $json = $serializer->serialize($endUsers, 'json', SerializationContext::create()->setGroups(array('customers:read')));
         $response = new JsonResponse($json, 200, [], true);
 
         return $response;
@@ -75,7 +75,7 @@ class ApiClientController extends AbstractController
     {
         $endUserDetails = $endUserRepository->findBy(['lastName' => $endUser->getLastName()]);
 
-        $json = $serializer->serialize($endUserDetails, 'json');
+        $json = $serializer->serialize($endUserDetails, 'json', SerializationContext::create()->setGroups(array('customers:read')));
 
         $response = new JsonResponse($json, 200, [], true);
 

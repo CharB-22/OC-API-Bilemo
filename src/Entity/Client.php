@@ -9,13 +9,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
 
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
- * @Hateoas\Relation("self", href = "expr('/api/clients/' ~ object.getId())")
+ * @Hateoas\Relation(
+ *     "self", 
+ *     href = "expr('/api/clients/' ~ object.getId())",
+ *     embedded = "expr(object.getEndUsers())"
+ * )
  */
 class Client implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -35,7 +40,6 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"clients:read"})
      */
     private $roles = [];
 
@@ -53,12 +57,13 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=EndUser::class, mappedBy="Client", orphanRemoval=true)
+     * 
      */
     private $endUsers;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"clients:read"})
+     * @Groups({"Default", "clients:read"})
      */
     private $username;
 
