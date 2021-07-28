@@ -15,6 +15,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
+ * @Hateoas\Relation("self", href = "expr('/api/clients/' ~ object.getId())")
  */
 class Client implements UserInterface, PasswordAuthenticatedUserInterface
 {
