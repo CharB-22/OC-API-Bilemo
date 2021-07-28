@@ -11,10 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Serializer\SerializerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Doctrine\ORM\EntityManagerInterface;
+use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\SerializationContext;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class ApiClientController extends AbstractController
@@ -22,19 +23,29 @@ class ApiClientController extends AbstractController
     /**
      * @Route("/api/clients", name="api_clients_list", methods={"GET"})
      */
-    public function getClientList(ClientRepository $clientRepository): Response
+    public function getClientList(ClientRepository $clientRepository, SerializerInterface $serializer): Response
     {
         
-        return $this->json($clientRepository->findAll(), 200, [], ['groups' => 'clients:read']);
+        $clients = $clientRepository->findAll();
+        
+        $json = $serializer->serialize($clients, 'json');
+
+        $response = new JsonResponse($json, 200, [], true);
+       
+        return $response;
     }
     
     /**
      * @Route("/api/clients/{id}", name="api_client_details", methods={"GET"})
      */
-    public function getClient(ClientRepository $clientRepository, Client $client): Response
+    public function getClient(ClientRepository $clientRepository, Client $client, SerializerInterface $serializer): Response
     {
+        $clientDetails = $clientRepository->find($client->getId());
 
-        return $this->json($clientRepository->find($client->getId()), 200, [], ['groups' => 'clients:read']);
+        $json = $serializer->serialize($clientDetails, 'json');
+
+        $response = new JsonResponse($json, 200, [], true);
+        return $response;
     }
 
     /**
@@ -42,10 +53,15 @@ class ApiClientController extends AbstractController
      */
     public function getClientCustomers(
         Client $client, 
-        EndUserRepository $endUserRepository): Response
+        EndUserRepository $endUserRepository,
+        SerializerInterface $serializer): Response
     {
+        $endUsers = $endUserRepository->findBy(['Client' => $client->getId()]);
 
-        return $this->json($endUserRepository->findBy(['Client' => $client->getId()]), 200, [], ['groups' => 'customers:read']);
+        $json = $serializer->serialize($endUsers, 'json');
+        $response = new JsonResponse($json, 200, [], true);
+
+        return $response;
     }
 
     /**
@@ -53,10 +69,17 @@ class ApiClientController extends AbstractController
      */
     public function getCustomerDetails(
         EndUser $endUser,
-        EndUserRepository $endUserRepository
-    )
+        EndUserRepository $endUserRepository,
+        SerializerInterface $serializer
+    ): Response
     {
-        return $this->json($endUserRepository->findBy(['lastName' => $endUser->getLastName()]), 200, [], ['groups' => 'customers:read']);
+        $endUserDetails = $endUserRepository->findBy(['lastName' => $endUser->getLastName()]);
+
+        $json = $serializer->serialize($endUserDetails, 'json');
+
+        $response = new JsonResponse($json, 200, [], true);
+
+        return $response;
     }
 
     /**
