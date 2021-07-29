@@ -7,9 +7,14 @@ nelmio_api_doc:
         components:
             securitySchemes:
                 Bearer:
-                    type: http
+                    type: apiKey
+                    description: 'Value: Bearer {jwt}'
+                    name: Authorization
+                    in: header
                     scheme: bearer
                     bearerFormat: JWT
+        security:
+            Bearer: []
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
