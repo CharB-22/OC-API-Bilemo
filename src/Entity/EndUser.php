@@ -5,12 +5,20 @@ namespace App\Entity;
 use App\Repository\EndUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
+use JMS\Serializer\Annotation\Groups;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 
 /**
  * @ORM\Entity(repositoryClass=EndUserRepository::class)
+ * @Hateoas\Relation(
+ *     "self", 
+ *     href = "expr('/api/clients/{company}/customers/' ~ object.getId())",
+ *     embedded = "expr(object.Client())"
+ * )
+ * @Hateoas\Relation("delete", href = "expr('/api/clients/{company}/customers/' ~ object.getId())")
  */
 class EndUser
 {

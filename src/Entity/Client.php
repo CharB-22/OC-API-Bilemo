@@ -9,12 +9,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use Symfony\Component\Serializer\Annotation\Groups;
-use Hateoas\Configuration\Annotation as Hateoas;
-
+use JMS\Serializer\Annotation\Groups;
+use Hateoas\Configuration\Annotation as Hateoas;    
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
+ * @Hateoas\Relation(
+ *     "self", 
+ *     href = "expr('/api/clients/' ~ object.getId())",
+ *     embedded = "expr(object.getEndUsers())"
+ * )
  */
 class Client implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -23,41 +28,46 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"clients:read"})
+     * @OA\Property(type="int", description="The unique identifier of the client.")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"clients:read"})
+     * @OA\Property(type="string", description="The email of the client.")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"clients:read"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @OA\Property(type="string", description="The hash password of the client in order to access the API.")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"clients:read"})
+     * @OA\Property(type="string", description="The name of the client's company.")
      */
     private $company;
 
     /**
      * @ORM\OneToMany(targetEntity=EndUser::class, mappedBy="Client", orphanRemoval=true)
+     * @OA\Property(description="The customers related to this client."))
      */
     private $endUsers;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"clients:read"})
+     * @Groups({"Default", "clients:read"})
+     * @OA\Property(type="string", description="The client's username in order to access the API.")
      */
     private $username;
 
