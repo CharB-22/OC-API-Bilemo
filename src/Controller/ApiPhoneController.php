@@ -32,7 +32,7 @@ class ApiPhoneController extends AbstractController
      *     )
      * )
      * @OA\Tag(name="Phone")
-     * @Security(name="Bearer")
+     * 
      */
     public function getPhoneList(PhoneRepository $phoneRepository, SerializerInterface $serializer): Response
     {
@@ -60,7 +60,7 @@ class ApiPhoneController extends AbstractController
      * )
      * @OA\Tag(name="Phone")
      * 
-     * @Security(name="Bearer")
+     *
      */
     public function getPhoneDetails(PhoneRepository $phoneRepository, 
     Phone $phone, 

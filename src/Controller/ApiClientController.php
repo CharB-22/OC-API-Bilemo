@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
-
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ApiClientController extends AbstractController
 {
@@ -69,6 +69,14 @@ class ApiClientController extends AbstractController
      *         @OA\Items(ref=@Model(type=Client::class))
      *     )
      * )
+     * 
+     * @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="The field used to select one client.",
+     *     @OA\Schema(type="string")
+     * )
+     * 
      * @OA\Tag(name="Client")
      * 
      * @Security(name="Bearer")
@@ -109,7 +117,9 @@ class ApiClientController extends AbstractController
         EndUserRepository $endUserRepository,
         SerializerInterface $serializer): Response
     {
+        // Select only the customers attached to the authentified client
         $endUsers = $endUserRepository->findBy(['Client' => $this->getUser()]);
+        
         $json = $serializer->serialize($endUsers, 'json', SerializationContext::create()->setGroups(array('customers:read')));
         $response = new JsonResponse($json, 200, [], true);
 
@@ -131,6 +141,13 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
+     * @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="The field used to identify one customer.",
+     *     @OA\Schema(type="string")
+     * )
+     * 
      * @OA\Tag(name="Customers")
      * 
      * @Security(name="Bearer")
@@ -141,8 +158,12 @@ class ApiClientController extends AbstractController
         SerializerInterface $serializer
     ): Response
     {
-        $endUserDetails = $endUserRepository->findBy(['lastName' => $endUser->getId()]);
-        $json = $serializer->serialize($endUserDetails, 'json', SerializationContext::create()->setGroups(array('customers:read')));
+        if ($endUser->getClient() !==  $this->getUser())
+        {
+            throw new AccessDeniedHttpException("Access denied - you don't have the rights to access this customer's details.");
+        }
+
+        $json = $serializer->serialize($endUser, 'json', SerializationContext::create()->setGroups(array('customers:read')));
 
         $response = new JsonResponse($json, 200, [], true);
 
@@ -153,7 +174,7 @@ class ApiClientController extends AbstractController
      * 
      * Create one customer attached to a selected client.
      * 
-     * @Route("/api/clients/{id}/customers", name="api_client_customer_new", methods={"POST"})
+     * @Route("/api/customers", name="api_client_customer_new", methods={"POST"})
      * 
      * @OA\Response(
      *     response=201,
@@ -215,7 +236,7 @@ class ApiClientController extends AbstractController
     /**
      * Delete one selected client's customer.
      * 
-     * @Route("/api/clients/{username}/customers/{id}", name="api_client_customer_delete", methods={"DELETE"})
+     * @Route("/api/customers/{id}", name="api_client_customer_delete", methods={"DELETE"})
      * 
      * @OA\Response(
      *     response=204,
@@ -226,20 +247,30 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
+     * @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="The field used to identify one customer.",
+     *     @OA\Schema(type="string")
+     * )
+     * 
      * @OA\Tag(name="Customers")
      * 
      * @Security(name="Bearer")
      */
     public function deleteCustomer(EndUser $endUser, EntityManagerInterface $manager)
     {
+
+        if ($endUser->getClient() !==  $this->getUser())
+        {
+            throw new AccessDeniedHttpException("Access denied - you don't have the rights to delete this customer.");
+        }
+
         // Remove the element from the database
         $manager->remove($endUser);
         $manager->flush();
 
-        return $this->json([
-            "status" => 204,
-            "message" => "Utilisateur supprimé."
-        ], 204);
+        return $this->json( null, 204);
         
     }
 }
