@@ -5,7 +5,8 @@ namespace App\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
@@ -16,8 +17,22 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $message = $exception->getMessage();
 
         $response = new JsonResponse($message);
+
+        if ($exception instanceof HttpException)
+        {
+            $data = [
+                'status' => $exception->getStatusCode(),
+                'message' => $message
+            ];
+
+            $response = new JsonResponse($data);
+        }
+        else
+        {
+            $response->setStatusCode(500);
+        }
+        
         $event->setResponse($response);
-      
     }
 
     public static function getSubscribedEvents()

@@ -21,7 +21,6 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @Hateoas\Relation(
  *     "delete", 
  *      href = "expr('/api/customers/' ~ object.getId())"),
- *      exclusion = @Hateoas\Exclusion(groups={"customers:read"})
  */
 class EndUser
 {
