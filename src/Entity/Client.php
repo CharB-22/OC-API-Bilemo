@@ -15,11 +15,6 @@ use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
- * @Hateoas\Relation(
- *     "self", 
- *     href = "expr('/api/clients/' ~ object.getId())",
- *     embedded = "expr(object.getEndUsers())"
- * )
  */
 class Client implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -27,15 +22,14 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"clients:read"})
      * @OA\Property(type="int", description="The unique identifier of the client.")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"clients:read"})
      * @OA\Property(type="string", description="The email of the client.")
+     * @Groups({"customers:read"})
      */
     private $email;
 
@@ -53,8 +47,8 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"clients:read"})
      * @OA\Property(type="string", description="The name of the client's company.")
+     * @Groups({"customers:read"})
      */
     private $company;
 
@@ -66,8 +60,8 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"Default", "clients:read"})
      * @OA\Property(type="string", description="The client's username in order to access the API.")
+     * @Groups({"customers:read"})
      */
     private $username;
 

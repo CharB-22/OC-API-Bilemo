@@ -33,6 +33,7 @@ class ApiPhoneController extends AbstractController
      * )
      * @OA\Tag(name="Phone")
      * 
+     * 
      */
     public function getPhoneList(PhoneRepository $phoneRepository, SerializerInterface $serializer): Response
     {

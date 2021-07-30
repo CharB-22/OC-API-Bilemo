@@ -15,10 +15,13 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @ORM\Entity(repositoryClass=EndUserRepository::class)
  * @Hateoas\Relation(
  *     "self", 
- *     href = "expr('/api/clients/{company}/customers/' ~ object.getId())",
- *     embedded = "expr(object.Client())"
+ *     href = "expr('/api/customers/' ~ object.getId())",
+ *     exclusion = @Hateoas\Exclusion(groups={"customers:read"})
  * )
- * @Hateoas\Relation("delete", href = "expr('/api/clients/{company}/customers/' ~ object.getId())")
+ * @Hateoas\Relation(
+ *     "delete", 
+ *      href = "expr('/api/customers/' ~ object.getId())"),
+ *      exclusion = @Hateoas\Exclusion(groups={"customers:read"})
  */
 class EndUser
 {
@@ -63,6 +66,7 @@ class EndUser
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="endUsers")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"customers:read"})
      */
     private $Client;
 
