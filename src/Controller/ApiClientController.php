@@ -26,84 +26,17 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class ApiClientController extends AbstractController
 {
     /**
-     * List all of Bilemo clients.
-     * 
-     * @Route("/api/clients", name="api_clients_list", methods={"GET"})
-     * 
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns the list of the clients.",
-     *     @OA\JsonContent(
-     *         type="array",
-     *         @OA\Items(ref=@Model(type=Client::class))
-     *     )
-     * )
-     * 
-     * @OA\Tag(name="Client")
-     * 
-     * @Security(name="Bearer")
-     * 
-     */
-    public function getClientList(ClientRepository $clientRepository, SerializerInterface $serializer): Response
-    {
-        
-        $clients = $clientRepository->findAll();
-        
-        $json = $serializer->serialize($clients, 'json', SerializationContext::create()->setGroups(array('clients:read')));
-
-        $response = new JsonResponse($json, 200, [], true);
-       
-        return $response;
-    }
-    
-    /**
-     * Give details on one selected client.
-     * 
-     * @Route("/api/clients/{id}", name="api_client_details", methods={"GET"})
-     * 
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns the details of a selected client.",
-     *     @OA\JsonContent(
-     *         type="array",
-     *         @OA\Items(ref=@Model(type=Client::class))
-     *     )
-     * )
-     * 
-     * @OA\Parameter(
-     *     name="id",
-     *     in="path",
-     *     description="The field used to select one client.",
-     *     @OA\Schema(type="string")
-     * )
-     * 
-     * @OA\Tag(name="Client")
-     * 
-     * @Security(name="Bearer")
-     * 
-     */
-    public function getClient(ClientRepository $clientRepository, Client $client, SerializerInterface $serializer): Response
-    {
-        $clientDetails = $clientRepository->find($client->getId());
-
-        $json = $serializer->serialize($clientDetails, 'json', SerializationContext::create()->setGroups(array('clients:read')));
-
-        $response = new JsonResponse($json, 200, [], true);
-        return $response;
-    }
-
-    /**
      * 
      * List the selected client's customers.
      * 
-     * @Route("/api/customers", name="api_client_customers", methods={"GET"})
+     * @Route("/api/customers", name="api_customers", methods={"GET"})
      * 
      * @OA\Response(
      *     response=200,
      *     description="Returns a list of the customers attached to the selected",
      *     @OA\JsonContent(
      *         type="array",
-     *         @OA\Items(ref=@Model(type=Client::class))
+     *         @OA\Items(ref=@Model(type=EndUser::class))
      *     )
      * )
      * 
@@ -112,15 +45,17 @@ class ApiClientController extends AbstractController
      * @Security(name="Bearer")
      * 
      */
-    public function getClientCustomers(
+    public function getCustomers(
         Request $request,
         EndUserRepository $endUserRepository,
         SerializerInterface $serializer): Response
     {
-        // Select only the customers attached to the authentified client
-        $endUsers = $endUserRepository->findBy(['Client' => $this->getUser()]);
         
+        // Select only the customers attached to the authentified client
+        $endUsers = $endUserRepository->findBy(['Client' => $this->getUser()->getId()]);
+       
         $json = $serializer->serialize($endUsers, 'json', SerializationContext::create()->setGroups(array('customers:read')));
+
         $response = new JsonResponse($json, 200, [], true);
 
         return $response;
