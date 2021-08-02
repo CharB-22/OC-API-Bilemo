@@ -130,7 +130,15 @@ class ApiClientController extends AbstractController
      *         @OA\Items(ref=@Model(type=EndUser::class))
      *     )
      * )
-     * @OA\RequestBody(description="Create new user", required=true, @OA\JsonContent(ref=@Model(type=User::class))),
+     * @OA\RequestBody(
+     *    required=true,
+     *    description="Pass customer information",
+     *    @OA\JsonContent(
+     *       required={"name","email"},
+     *       @OA\Property(property="name", type="string", example="Harry Potter"),
+     *       @OA\Property(property="email", type="string", example="hPotter@hogwarts.com")
+     *    ),
+     * ),
      * @OA\Response(response="401",description="JWT Token not found.")
      * @OA\Response(response=403, description="Forbidden"),
 	 * @OA\Response(response="404",description="Not found.")

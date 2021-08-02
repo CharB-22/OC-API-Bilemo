@@ -39,8 +39,7 @@ class ClientFixtures extends Fixture
             // Create a set of endUsers attached to this client
             for ($j = 0; $j < 10; $j++) {
                 $endUser = new endUser();
-                $endUser->setFirstName($faker->firstName())
-                        ->setLastName($faker->lastName())
+                $endUser->setName($faker->name())
                         ->setEmail($faker->email())
                         ->setClient($client);
                 // Save the info for this endUser
@@ -63,8 +62,7 @@ class ClientFixtures extends Fixture
         // Create a set of endUsers attached to this client
         for ($i = 0; $i < 10; $i++) {
             $endUser = new endUser();
-            $endUser->setFirstName($faker->firstName())
-                    ->setLastName($faker->lastName())
+            $endUser->setName($faker->name())
                     ->setEmail($faker->email())
                     ->setClient($client);
             // Save the info for this endUser
