@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use JMS\Serializer\Annotation\Groups;
 use Hateoas\Configuration\Annotation as Hateoas;
-
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=EndUserRepository::class)
@@ -29,6 +29,7 @@ class EndUser
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"customers:read"})
+     * @OA\Property(type="int", description="The unique identifier of the enduser.")
      */
     private $id;
 
@@ -38,6 +39,7 @@ class EndUser
      * @Assert\NotBlank(
      *     message = "Cette information doit être renseignée pour la création de cet utilisateur."
      * )
+     * @OA\Property(type="string", description="End user's first name.")
      */
     private $firstName;
 
@@ -47,6 +49,7 @@ class EndUser
      * @Assert\NotBlank(
      *     message = "Cette information doit être renseignée pour la création de cet utilisateur."
      * )
+     * @OA\Property(type="string", description="End user's last name.")
      */
     private $lastName;
 
@@ -59,6 +62,7 @@ class EndUser
      * @Assert\Email(
      *     message = "L'email '{{ value }}' ne respecte pas le format."
      * )
+     * @OA\Property(type="string", description="End user's email.")
      */
     private $email;
 
@@ -66,6 +70,7 @@ class EndUser
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="endUsers")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"customers:read"})
+     * @OA\Property(type="object", description="The client whom the end user is attached to.")
      */
     private $Client;
 
