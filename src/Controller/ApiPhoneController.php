@@ -31,6 +31,10 @@ class ApiPhoneController extends AbstractController
      *         @OA\Items(ref=@Model(type=Phone::class))
      *     )
      * )
+     * 
+     * @OA\Response(response="401",description="JWT Token not found.")
+	 * @OA\Response(response="404",description="Not route found.")
+     * 
      * @OA\Tag(name="Phone")
      * 
      * 
@@ -53,11 +57,21 @@ class ApiPhoneController extends AbstractController
      * 
      * @OA\Response(
      *     response=200,
-     *     description="Returns the details of a phone object.",
+     *     description="Returns the details of a selected phone.",
      *     @OA\JsonContent(
      *         type="array",
      *         @OA\Items(ref=@Model(type=Phone::class))
      *     )
+     * )
+     * 
+     * @OA\Response(response="401",description="JWT Token not found.")
+	 * @OA\Response(response="404",description="Not route found.")
+     * 
+     * @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="The unique identifier of one phone.",
+     *     @OA\Schema(type="string")
      * )
      * @OA\Tag(name="Phone")
      * 
