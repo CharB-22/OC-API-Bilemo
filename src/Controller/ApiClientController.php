@@ -120,7 +120,7 @@ class ApiClientController extends AbstractController
      * 
      * Create one customer attached to a selected client.
      * 
-     * @Route("/api/customers", name="api_client_customer_new", methods={"POST"})
+     * @Route("/api/customers", name="api_customer_new", methods={"POST"})
      * 
      * @OA\Response(
      *     response=201,
@@ -130,16 +130,7 @@ class ApiClientController extends AbstractController
      *         @OA\Items(ref=@Model(type=EndUser::class))
      *     )
      * )
-     *@OA\RequestBody(
-     *    required=true,
-     *    description="Fill in new customer information",
-     *    @OA\JsonContent(
-     *       required={"firstName","lastName", "email"},
-     *       @OA\Property(property="firstName", type="string", example="Harry"),
-     *       @OA\Property(property="lastName", type="string", example="Potter"),
-     *       @OA\Property(property="email", type="string", example="hpotter@hogwarts.com"),
-     *    ),
-     * ),
+     * @OA\RequestBody(description="Create new user", required=true, @OA\JsonContent(ref=@Model(type=User::class))),
      * @OA\Response(response="401",description="JWT Token not found.")
      * @OA\Response(response=403, description="Forbidden"),
 	 * @OA\Response(response="404",description="Not found.")
@@ -151,20 +142,19 @@ class ApiClientController extends AbstractController
      */
     public function createCustomer(
         Request $request, 
-        Client $client, 
         SerializerInterface $serializer, 
         EntityManagerInterface $manager,
         ValidatorInterface $validator
         )
     {
 
-        // Get the information of the new Client from the POST request
-        $jsonContent = $request->getContent();
-
         try {
+            
+            // Get the information of the new Client from the POST request
+            $jsonContent = $request->getContent();
             // Deserialize from json to be saved as an EndUser
             $newCustomer = $serializer->deserialize($jsonContent, EndUser::class, 'json');
-            $newCustomer->setClient($client);
+            $newCustomer->setClient($this->getUser());
 
             // Make sure that the info given respect the rules
             $errors = $validator->validate($newCustomer);

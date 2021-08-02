@@ -41,26 +41,13 @@ class EndUser
      * )
      * @OA\Property(type="string", description="End user's first name.")
      */
-    private $firstName;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers:read"})
      * @Assert\NotBlank(
      *     message = "Cette information doit être renseignée pour la création de cet utilisateur."
-     * )
-     * @OA\Property(type="string", description="End user's last name.")
-     */
-    private $lastName;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"customers:read"})
-     * @Assert\NotBlank(
-     *     message = "Cette information doit être renseignée pour la création de cet utilisateur."
-     * )
-     * @Assert\Email(
-     *     message = "L'email '{{ value }}' ne respecte pas le format."
      * )
      * @OA\Property(type="string", description="End user's email.")
      */
@@ -79,26 +66,14 @@ class EndUser
         return $this->id;
     }
 
-    public function getFirstName(): ?string
+    public function getName(): ?string
     {
-        return $this->firstName;
+        return $this->name;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setName(string $name): self
     {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
+        $this->name = $name;
 
         return $this;
     }
