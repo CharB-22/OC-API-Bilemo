@@ -34,9 +34,11 @@ class ApiPhoneController extends AbstractController
      * 
      * @OA\Response(response="401",description="JWT Token not found.")
 	 * @OA\Response(response="404",description="Not route found.")
+     * @OA\Response(response=500, description="Internal error")
      * 
      * @OA\Tag(name="Phone")
      * 
+     * @Security(name="Bearer")
      * 
      */
     public function getPhoneList(PhoneRepository $phoneRepository, SerializerInterface $serializer): Response
@@ -65,17 +67,20 @@ class ApiPhoneController extends AbstractController
      * )
      * 
      * @OA\Response(response="401",description="JWT Token not found.")
-	 * @OA\Response(response="404",description="Not route found.")
+	 * @OA\Response(response="404",description="Not found.")
+     * @OA\Response(response=500, description="Internal error")
      * 
      * @OA\Parameter(
      *     name="id",
      *     in="path",
      *     description="The unique identifier of one phone.",
-     *     @OA\Schema(type="string")
+     *     @OA\Schema(type="integer"),
+     *     @OA\Examples(example="int", value="1",summary="An int value for example")
      * )
      * @OA\Tag(name="Phone")
      * 
-     *
+     * @Security(name="Bearer")
+     * 
      */
     public function getPhoneDetails(PhoneRepository $phoneRepository, 
     Phone $phone, 

@@ -40,6 +40,11 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
+     * @OA\Response(response="401",description="JWT Token not found.")
+     * @OA\Response(response=403, description="Forbidden"),
+	 * @OA\Response(response="404",description="Not found.")
+     * @OA\Response(response=500, description="Internal error")
+     * 
      * @OA\Tag(name="Customers")
      * 
      * @Security(name="Bearer")
@@ -76,11 +81,17 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
+     * @OA\Response(response="401",description="JWT Token not found.")
+     * @OA\Response(response=403, description="Forbidden"),
+	 * @OA\Response(response="404",description="Not found.")
+     * @OA\Response(response=500, description="Internal error")
+     * 
      * @OA\Parameter(
      *     name="id",
      *     in="path",
      *     description="The field used to identify one customer.",
-     *     @OA\Schema(type="string")
+     *     @OA\Schema(type="integer"),
+     *     @OA\Examples(example="int", value="1",summary="An int value for example")
      * )
      * 
      * @OA\Tag(name="Customers")
@@ -113,12 +124,26 @@ class ApiClientController extends AbstractController
      * 
      * @OA\Response(
      *     response=201,
-     *     description="Create a new customer attached to a selected client.",
+     *     description="Create a new customer attached to the authentified client.",
      *     @OA\JsonContent(
      *         type="array",
      *         @OA\Items(ref=@Model(type=EndUser::class))
      *     )
      * )
+     *@OA\RequestBody(
+     *    required=true,
+     *    description="Fill in new customer information",
+     *    @OA\JsonContent(
+     *       required={"firstName","lastName", "email"},
+     *       @OA\Property(property="firstName", type="string", example="Harry"),
+     *       @OA\Property(property="lastName", type="string", example="Potter"),
+     *       @OA\Property(property="email", type="string", example="hpotter@hogwarts.com"),
+     *    ),
+     * ),
+     * @OA\Response(response="401",description="JWT Token not found.")
+     * @OA\Response(response=403, description="Forbidden"),
+	 * @OA\Response(response="404",description="Not found.")
+     * @OA\Response(response=500, description="Internal error")
      * 
      * @OA\Tag(name="Customers")
      * 
@@ -141,7 +166,7 @@ class ApiClientController extends AbstractController
             $newCustomer = $serializer->deserialize($jsonContent, EndUser::class, 'json');
             $newCustomer->setClient($client);
 
-            // Make sure that the info are corrects
+            // Make sure that the info given respect the rules
             $errors = $validator->validate($newCustomer);
 
             if (count($errors) > 0)
@@ -182,11 +207,17 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
+     * @OA\Response(response="401",description="JWT Token not found.")
+	 * @OA\Response(response="404",description="Not found.")
+     * @OA\Response(response=500, description="Internal error")
+     * @OA\Response(response=403, description="Forbidden")
+     * 
      * @OA\Parameter(
      *     name="id",
      *     in="path",
      *     description="The field used to identify one customer.",
-     *     @OA\Schema(type="string")
+     *     @OA\Schema(type="string"),
+     *     @OA\Examples(example="int", value="100",summary="An int value for example")
      * )
      * 
      * @OA\Tag(name="Customers")
