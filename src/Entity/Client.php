@@ -45,12 +45,6 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @OA\Property(type="string", description="The name of the client's company.")
-     * @Groups({"customers:read"})
-     */
-    private $company;
 
     /**
      * @ORM\OneToMany(targetEntity=EndUser::class, mappedBy="Client", orphanRemoval=true)
@@ -159,17 +153,6 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getCompany(): ?string
-    {
-        return $this->company;
-    }
-
-    public function setCompany(string $company): self
-    {
-        $this->company = $company;
-
-        return $this;
-    }
 
     /**
      * @return Collection|EndUser[]
