@@ -37,7 +37,12 @@ use OpenApi\Annotations as OA;
  *         "api_customer_new"
  *      ),
  *     exclusion = @Hateoas\Exclusion(groups={"customers:read"})
- * )
+ * ),
+ * @Hateoas\Relation(
+ *     "client", 
+ *     embedded = @Hateoas\Embedded("expr(object.getClient())"),
+ *     exclusion = @Hateoas\Exclusion(groups={"customers:read"})
+ * ),
  * 
  */
 class EndUser
