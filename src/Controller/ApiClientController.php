@@ -40,6 +40,10 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=403, description="Error: Forbidden"),
+     * @OA\Response(response=500, description="Error: Internal error")
+     * 
      * @OA\Tag(name="Customers")
      * 
      * @Security(name="Bearer")
@@ -76,11 +80,17 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=403, description="Error: Forbidden"),
+     * @OA\Response(response="404",description="Error: Not found.")
+     * @OA\Response(response=500, description="Error: Internal error")
+     * 
      * @OA\Parameter(
      *     name="id",
      *     in="path",
      *     description="The field used to identify one customer.",
-     *     @OA\Schema(type="string")
+     *     @OA\Schema(type="integer"),
+     *     @OA\Examples(example="int", value="1",summary="An int value for example")
      * )
      * 
      * @OA\Tag(name="Customers")
@@ -109,16 +119,29 @@ class ApiClientController extends AbstractController
      * 
      * Create one customer attached to a selected client.
      * 
-     * @Route("/api/customers", name="api_client_customer_new", methods={"POST"})
+     * @Route("/api/customers", name="api_customer_new", methods={"POST"})
      * 
      * @OA\Response(
      *     response=201,
-     *     description="Create a new customer attached to a selected client.",
+     *     description="Create a new customer attached to the authentified client.",
      *     @OA\JsonContent(
      *         type="array",
      *         @OA\Items(ref=@Model(type=EndUser::class))
      *     )
      * )
+     * @OA\RequestBody(
+     *    required=true,
+     *    description="Pass customer information",
+     *    @OA\JsonContent(
+     *       required={"name","email"},
+     *       @OA\Property(property="name", type="string", example="Harry Potter"),
+     *       @OA\Property(property="email", type="string", example="hPotter@hogwarts.com")
+     *    ),
+     * ),
+     * @OA\Response(response="400",description="Error: Bad Request.")
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=403, description="Error: Forbidden"),
+     * @OA\Response(response=500, description="Error: Internal error")
      * 
      * @OA\Tag(name="Customers")
      * 
@@ -126,22 +149,21 @@ class ApiClientController extends AbstractController
      */
     public function createCustomer(
         Request $request, 
-        Client $client, 
         SerializerInterface $serializer, 
         EntityManagerInterface $manager,
         ValidatorInterface $validator
         )
     {
 
-        // Get the information of the new Client from the POST request
-        $jsonContent = $request->getContent();
-
         try {
+            
+            // Get the information of the new Client from the POST request
+            $jsonContent = $request->getContent();
             // Deserialize from json to be saved as an EndUser
             $newCustomer = $serializer->deserialize($jsonContent, EndUser::class, 'json');
-            $newCustomer->setClient($client);
+            $newCustomer->setClient($this->getUser());
 
-            // Make sure that the info are corrects
+            // Make sure that the info given respect the rules
             $errors = $validator->validate($newCustomer);
 
             if (count($errors) > 0)
@@ -171,7 +193,7 @@ class ApiClientController extends AbstractController
     /**
      * Delete one selected client's customer.
      * 
-     * @Route("/api/customers/{id}", name="api_client_customer_delete", methods={"DELETE"})
+     * @Route("/api/customers/{id}", name="api_customer_delete", methods={"DELETE"})
      * 
      * @OA\Response(
      *     response=204,
@@ -182,11 +204,17 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=403, description="Error: Forbidden")
+	 * @OA\Response(response="404",description="Error: Not found.")
+     * @OA\Response(response=500, description="Error: Internal error")
+     * 
      * @OA\Parameter(
      *     name="id",
      *     in="path",
      *     description="The field used to identify one customer.",
-     *     @OA\Schema(type="string")
+     *     @OA\Schema(type="string"),
+     *     @OA\Examples(example="int", value="100",summary="An int value for example")
      * )
      * 
      * @OA\Tag(name="Customers")

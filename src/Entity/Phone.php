@@ -5,12 +5,19 @@ namespace App\Entity;
 use App\Repository\PhoneRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
-
+use OpenApi\Annotations as OA;
 
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
- * @Hateoas\Relation("self", href = "expr('/api/phones/' ~ object.getId())")
+ * @Hateoas\Relation(
+ *     "self", 
+ *     href = @Hateoas\Route(
+ *         "api_phones",
+ *         parameters = { "id" = "expr(object.getId())" },
+ *   				absolute= true
+ *      )
+ * )
  */
 class Phone
 {
@@ -18,31 +25,38 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @OA\Property(type="int", description="The unique identifier of the phone.")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @OA\Property(type="string", description="The phone marketing name.")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @OA\Property(type="string", description="The phone's brand.")
+     * 
      */
     private $brand;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @OA\Property(type="string", description="A quick description of the phone.")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @OA\Property(type="string", description="Precision on the phone's colour.")
      */
     private $colour;
 
     /**
      * @ORM\Column(type="integer")
+     * @OA\Property(type="integer", description="The phone's price.")
      */
     private $price;
 

@@ -13,6 +13,49 @@ nelmio_api_doc:
         security:
             - Bearer: []
 
+# Begin of manual endpoint definition  
+#####################################
+        paths:
+          /api/login_check:
+            post:
+              tags:
+                - Login
+              description: Login with client's credentials.
+              requestBody:
+                description: Json body
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          example: 'testuser'
+                        password:
+                          type: string
+                          example: 'testuser'
+              responses:
+                '200':
+                  description: Login successful
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          token:
+                            type: string
+                '401':
+                  description: Invalid credentials.
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          token:
+                            type: string
+
+
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

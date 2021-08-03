@@ -22,25 +22,23 @@ class ClientFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $company = ['Orange', 'SFR', 'Bouygues', 'Amazon', 'Darty'];
+        $client = ['Orange', 'SFR', 'Bouygues', 'Free'];
 
         // Generate faker to create fake data
         $faker = Factory::create();
 
-        for ($i = 0; $i < 5; $i++) {
+        foreach ($client as $provider) {
 
             $client = new Client();
-            $client->setEmail($faker->email())
-                   ->setUsername($faker->username())
+            $client->setUsername($provider)
+                   ->setEmail($provider . "@" . $provider . ".com" )
                    ->setRoles(['ROLE_USER'])
-                   ->setPassword($faker->password())
-                   ->setCompany($company[array_rand($company)]);
+                   ->setPassword($faker->password());
             
             // Create a set of endUsers attached to this client
             for ($j = 0; $j < 10; $j++) {
                 $endUser = new endUser();
-                $endUser->setFirstName($faker->firstName())
-                        ->setLastName($faker->lastName())
+                $endUser->setName($faker->name())
                         ->setEmail($faker->email())
                         ->setClient($client);
                 // Save the info for this endUser
@@ -55,16 +53,14 @@ class ClientFixtures extends Fixture
         $client->setEmail('testUser@mail.com')
                ->setUsername('testuser')
                ->setRoles(['ROLE_USER'])
-               ->setPassword($this->passwordHasher->hashPassword($client,'testuser'))
-               ->setCompany('Orange');
+               ->setPassword($this->passwordHasher->hashPassword($client,'testuser'));
         
         $manager->persist($client);
 
         // Create a set of endUsers attached to this client
         for ($i = 0; $i < 10; $i++) {
             $endUser = new endUser();
-            $endUser->setFirstName($faker->firstName())
-                    ->setLastName($faker->lastName())
+            $endUser->setName($faker->name())
                     ->setEmail($faker->email())
                     ->setClient($client);
             // Save the info for this endUser
