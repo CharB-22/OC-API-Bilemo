@@ -194,7 +194,7 @@ class ApiClientController extends AbstractController
     /**
      * Delete one selected client's customer.
      * 
-     * @Route("/api/customers/{id}", name="api_client_customer_delete", methods={"DELETE"})
+     * @Route("/api/customers/{id}", name="api_customer_delete", methods={"DELETE"})
      * 
      * @OA\Response(
      *     response=204,

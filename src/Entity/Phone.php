@@ -10,6 +10,14 @@ use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
+ * @Hateoas\Relation(
+ *     "self", 
+ *     href = @Hateoas\Route(
+ *         "api_phones",
+ *         parameters = { "id" = "expr(object.getId())" },
+ *   				absolute= true
+ *      )
+ * )
  */
 class Phone
 {

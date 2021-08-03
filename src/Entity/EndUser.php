@@ -15,12 +15,30 @@ use OpenApi\Annotations as OA;
  * @ORM\Entity(repositoryClass=EndUserRepository::class)
  * @Hateoas\Relation(
  *     "self", 
- *     href = "expr('/api/customers/' ~ object.getId())",
+ *     href = @Hateoas\Route(
+ *         "api_customers",
+ *         parameters = { "id" = "expr(object.getId())" },
+ *   				absolute= true
+ *      ),
  *     exclusion = @Hateoas\Exclusion(groups={"customers:read"})
- * )
+ * ),
  * @Hateoas\Relation(
  *     "delete", 
- *      href = "expr('/api/customers/' ~ object.getId())"),
+ *     href = @Hateoas\Route(
+ *         "api_customer_delete",
+ *         parameters = { "id" = "expr(object.getId())" },
+ *   				absolute= true
+ *      ),
+ *     exclusion = @Hateoas\Exclusion(groups={"customers:read"})
+ * ),
+ * @Hateoas\Relation(
+ *     "create", 
+ *     href = @Hateoas\Route(
+ *         "api_customer_new"
+ *      ),
+ *     exclusion = @Hateoas\Exclusion(groups={"customers:read"})
+ * )
+ * 
  */
 class EndUser
 {

@@ -21,7 +21,7 @@ class ApiPhoneController extends AbstractController
     /**
      * List the phone selection available at Bilemo.
      * 
-     * @Route("/api/phones", name="api_phones_list", methods = {"GET"})
+     * @Route("/api/phones", name="api_phones", methods = {"GET"})
      * 
      * @OA\Response(
      *     response=200,
