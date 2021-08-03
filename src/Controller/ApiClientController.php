@@ -40,10 +40,9 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
-     * @OA\Response(response="401",description="JWT Token not found.")
-     * @OA\Response(response=403, description="Forbidden"),
-	 * @OA\Response(response="404",description="Not found.")
-     * @OA\Response(response=500, description="Internal error")
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=403, description="Error: Forbidden"),
+     * @OA\Response(response=500, description="Error: Internal error")
      * 
      * @OA\Tag(name="Customers")
      * 
@@ -81,10 +80,10 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
-     * @OA\Response(response="401",description="JWT Token not found.")
-     * @OA\Response(response=403, description="Forbidden"),
-	 * @OA\Response(response="404",description="Not found.")
-     * @OA\Response(response=500, description="Internal error")
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=403, description="Error: Forbidden"),
+     * @OA\Response(response="404",description="Error: Not found.")
+     * @OA\Response(response=500, description="Error: Internal error")
      * 
      * @OA\Parameter(
      *     name="id",
@@ -139,10 +138,10 @@ class ApiClientController extends AbstractController
      *       @OA\Property(property="email", type="string", example="hPotter@hogwarts.com")
      *    ),
      * ),
-     * @OA\Response(response="401",description="JWT Token not found.")
-     * @OA\Response(response=403, description="Forbidden"),
-	 * @OA\Response(response="404",description="Not found.")
-     * @OA\Response(response=500, description="Internal error")
+     * @OA\Response(response="400",description="Error: Bad Request.")
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=403, description="Error: Forbidden"),
+     * @OA\Response(response=500, description="Error: Internal error")
      * 
      * @OA\Tag(name="Customers")
      * 
@@ -205,10 +204,10 @@ class ApiClientController extends AbstractController
      *     )
      * )
      * 
-     * @OA\Response(response="401",description="JWT Token not found.")
-	 * @OA\Response(response="404",description="Not found.")
-     * @OA\Response(response=500, description="Internal error")
-     * @OA\Response(response=403, description="Forbidden")
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=403, description="Error: Forbidden")
+	 * @OA\Response(response="404",description="Error: Not found.")
+     * @OA\Response(response=500, description="Error: Internal error")
      * 
      * @OA\Parameter(
      *     name="id",

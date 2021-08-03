@@ -32,9 +32,8 @@ class ApiPhoneController extends AbstractController
      *     )
      * )
      * 
-     * @OA\Response(response="401",description="JWT Token not found.")
-	 * @OA\Response(response="404",description="Not route found.")
-     * @OA\Response(response=500, description="Internal error")
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+     * @OA\Response(response=500, description="Error: Internal error")
      * 
      * @OA\Tag(name="Phone")
      * 
@@ -66,9 +65,9 @@ class ApiPhoneController extends AbstractController
      *     )
      * )
      * 
-     * @OA\Response(response="401",description="JWT Token not found.")
-	 * @OA\Response(response="404",description="Not found.")
-     * @OA\Response(response=500, description="Internal error")
+     * @OA\Response(response="401",description="Error: Unauthorized.")
+	 * @OA\Response(response="404",description="Error: Not found.")
+     * @OA\Response(response=500, description="Error: Internal error")
      * 
      * @OA\Parameter(
      *     name="id",

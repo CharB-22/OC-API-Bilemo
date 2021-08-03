@@ -45,6 +45,15 @@ nelmio_api_doc:
                         properties:
                           token:
                             type: string
+                '401':
+                  description: Invalid credentials.
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          token:
+                            type: string
 
 
     areas: # to filter documented areas
