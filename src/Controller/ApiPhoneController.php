@@ -11,10 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use JMS\Serializer\SerializerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
-
+use Symfony\Component\HttpFoundation\Request;
 
 class ApiPhoneController extends AbstractController
 {
@@ -22,7 +23,13 @@ class ApiPhoneController extends AbstractController
      * List the phone selection available at Bilemo.
      * 
      * @Route("/api/phones", name="api_phones", methods = {"GET"})
-     * 
+     * @OA\Parameter(
+	 *         name="page",
+	 *         in="query",
+	 *         description="Page to filter by",
+	 *         required=false
+	 *     )
+	 * )
      * @OA\Response(
      *     response=200,
      *     description="Returns the list of phones.",
@@ -40,11 +47,11 @@ class ApiPhoneController extends AbstractController
      * @Security(name="Bearer")
      * 
      */
-    public function getPhoneList(PhoneRepository $phoneRepository, SerializerInterface $serializer): Response
+    public function getPhoneList(PhoneRepository $phoneRepository, Request $request, SerializerInterface $serializer, PaginatorInterface $paginator): Response
     {
         $phones = $phoneRepository->findAll();
-
-        $json = $serializer->serialize($phones, 'json');
+        $phoneList =  $paginator->paginate($phones, $request->query->getInt('page', 1), 5);
+        $json = $serializer->serialize($phoneList->getItems(), 'json');
 
         $response = new JsonResponse($json, 200, [], true);
        
