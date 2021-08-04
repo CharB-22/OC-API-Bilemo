@@ -11,17 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 class ApiClientController extends AbstractController
 {
@@ -52,13 +52,16 @@ class ApiClientController extends AbstractController
     public function getCustomers(
         Request $request,
         EndUserRepository $endUserRepository,
-        SerializerInterface $serializer): Response
+        SerializerInterface $serializer,
+        PaginatorInterface $paginator): Response
     {
         
-        // Select only the customers attached to the authentified client
-        $endUsers = $endUserRepository->findBy(['Client' => $this->getUser()->getId()]);
-       
-        $json = $serializer->serialize($endUsers, 'json', SerializationContext::create()->setGroups(array('customers:read')));
+        // Select only the customers attached to the authentified client and filter results 5by5
+        $endUsers = $endUserRepository->findBy(['Client' => $this->getUser()]);
+        dd($endUsers);
+        $list = $paginator->paginate($endUserRepository->findBy(['Client' => $this->getUser()], $request->query->getInt('page', 1), 5));
+        dd($list);
+        $json = $serializer->serialize($list, 'json', SerializationContext::create()->setGroups(array('customers:read')));
 
         $response = new JsonResponse($json, 200, [], true);
 

@@ -9,12 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use JMS\Serializer\Annotation\Groups;
-use Hateoas\Configuration\Annotation as Hateoas;    
+use JMS\Serializer\Annotation\Groups; 
 use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
+ * 
  */
 class Client implements UserInterface, PasswordAuthenticatedUserInterface
 {
