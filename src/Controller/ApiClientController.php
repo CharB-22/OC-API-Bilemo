@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Entity\EndUser;
 use App\Repository\ClientRepository;
 use App\Repository\EndUserRepository;
+use ContainerKBRuVrZ\PaginatorInterface_82dac15;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,13 @@ class ApiClientController extends AbstractController
      * List the selected client's customers.
      * 
      * @Route("/api/customers", name="api_customers", methods={"GET"})
-     * 
+     * @OA\Parameter(
+	 *         name="page",
+	 *         in="query",
+	 *         description="Page to filter by",
+	 *         required=false
+	 *     )
+	 * )
      * @OA\Response(
      *     response=200,
      *     description="Returns a list of the customers attached to the selected",
@@ -56,12 +63,10 @@ class ApiClientController extends AbstractController
         PaginatorInterface $paginator): Response
     {
         
-        // Select only the customers attached to the authentified client and filter results 5by5
+        // Select only the customers attached to the authentified client
         $endUsers = $endUserRepository->findBy(['Client' => $this->getUser()]);
-        dd($endUsers);
-        $list = $paginator->paginate($endUserRepository->findBy(['Client' => $this->getUser()], $request->query->getInt('page', 1), 5));
-        dd($list);
-        $json = $serializer->serialize($list, 'json', SerializationContext::create()->setGroups(array('customers:read')));
+        $list =  $paginator->paginate($endUsers, $request->query->getInt('page', 1), 5);
+        $json = $serializer->serialize($list->getItems(), 'json', SerializationContext::create()->setGroups(array('customers:read')));
 
         $response = new JsonResponse($json, 200, [], true);
 
