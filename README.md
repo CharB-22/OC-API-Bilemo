@@ -7,6 +7,7 @@ https://openclassrooms.com/fr/paths/59/projects/43/assignment
   * [Repository Content](#repository-content)
   * [Technologies](#technologies)
   * [Set Up](#set-up)
+  * [Live Demo](#live-demo)
 
 ## Repository content
   * The application pages and folders needed to run the application
@@ -17,6 +18,8 @@ https://openclassrooms.com/fr/paths/59/projects/43/assignment
   * PHP 7.4.1
   * Symfony 5.2.9
   * Composer 2.0.13
+
+## Set-up
 
   * Clone or download the github project
   ```
@@ -39,7 +42,7 @@ https://openclassrooms.com/fr/paths/59/projects/43/assignment
   ```
   * Import the structure of the database thanks to the migrations in the project :
   ```
-  php bin/console doctrine:database:create
+  php bin/console doctrine:migrations:migrate
   ```
   * Populate the database with the datas used to test
   ```
@@ -69,3 +72,8 @@ The set-up is ready ! In order to see the details and understand how the API wor
   ```
     localhost:8000/api/doc
   ```
+
+## Live Demo
+
+This project can be found on a live url : https://oc-bilemo.herokuapp.com/api/doc
+
